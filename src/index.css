@@ -17,26 +17,43 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
+    /* PNB Brand Colors */
+    --primary: 0 65% 35%;
+    --primary-foreground: 0 0% 100%;
+    
+    --pnb-red: 0 65% 35%;
+    --pnb-red-light: 0 65% 45%;
+    --pnb-gold: 45 90% 55%;
+    --pnb-gold-light: 45 85% 65%;
+    
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 115 10% 55%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 45 90% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --success: 120 45% 50%;
+    --success-foreground: 0 0% 100%;
+    
+    --coral: 15 85% 70%;
+    --coral-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 0 65% 35%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+    
+    /* Custom gradients */
+    --gradient-pnb: linear-gradient(135deg, hsl(var(--pnb-red)), hsl(var(--pnb-red-light)));
+    --gradient-gold: linear-gradient(135deg, hsl(var(--pnb-gold)), hsl(var(--pnb-gold-light)));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(120 45% 60%));
 
     --sidebar-background: 0 0% 98%;
 

@@ -47,6 +47,22 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "pnb-red": {
+          DEFAULT: "hsl(var(--pnb-red))",
+          light: "hsl(var(--pnb-red-light))",
+        },
+        "pnb-gold": {
+          DEFAULT: "hsl(var(--pnb-gold))",
+          light: "hsl(var(--pnb-gold-light))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        coral: {
+          DEFAULT: "hsl(var(--coral))",
+          foreground: "hsl(var(--coral-foreground))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -62,6 +78,11 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      backgroundImage: {
+        "gradient-pnb": "var(--gradient-pnb)",
+        "gradient-gold": "var(--gradient-gold)",
+        "gradient-success": "var(--gradient-success)",
       },
       keyframes: {
         "accordion-down": {
