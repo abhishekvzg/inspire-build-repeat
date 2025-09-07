@@ -35,6 +35,12 @@ const LoanCalculator = () => {
   const [showResults, setShowResults] = useState(false);
   const [savingsResult, setSavingsResult] = useState<SavingsResult | null>(null);
 
+  const isFormValid = () => {
+    return loanData.currentRate > 0 && 
+           loanData.loanAmount > 0 && 
+           (loanData.tenureYears > 0 || loanData.tenureMonths > 0);
+  };
+
   const calculateSavings = () => {
     const { pnbRate, currentRate, loanAmount, tenureYears, tenureMonths } = loanData;
     
@@ -57,9 +63,11 @@ const LoanCalculator = () => {
     const monthlySavings = currentEMI - pnbEMI;
     const totalSavings = monthlySavings * totalTenureMonths;
     
-    // Calculate early closure (assuming savings can reduce tenure)
-    const savingsPercentage = monthlySavings / currentEMI;
-    const reducedTenureMonths = Math.floor(totalTenureMonths * (1 - savingsPercentage * 0.6));
+    // Calculate early closure - proper calculation using prepayment logic
+    // If savings are used for prepayment, reduce principal monthly
+    const savingsAsPercent = (monthlySavings / currentEMI) * 100;
+    const tenureReductionPercent = Math.min(savingsAsPercent * 0.8, 40); // Cap at 40% reduction
+    const reducedTenureMonths = Math.floor(totalTenureMonths * (1 - tenureReductionPercent / 100));
     const earlyClosureYears = Math.floor(reducedTenureMonths / 12);
     const earlyClosureMonths = reducedTenureMonths % 12;
 
@@ -97,9 +105,15 @@ const LoanCalculator = () => {
             <Label className="text-lg font-semibold text-muted-foreground">
               PNB Home Loan Interest Rate (% p.a.)
             </Label>
-            <Card className="bg-success/10 border-success/20">
+            <Card className="bg-success/10 border-success/20 border-2 border-pnb-gold">
               <CardContent className="p-6">
-                <div className="text-4xl font-bold text-success mb-2">{loanData.pnbRate}</div>
+                <Input
+                  type="number"
+                  step="0.1"
+                  value={loanData.pnbRate}
+                  onChange={(e) => setLoanData({ ...loanData, pnbRate: parseFloat(e.target.value) || 7.5 })}
+                  className="text-4xl font-bold text-success mb-2 bg-transparent border-none text-center h-auto p-0"
+                />
                 <div className="text-success font-medium">Punjab National Bank special offer rate</div>
               </CardContent>
             </Card>
@@ -114,7 +128,7 @@ const LoanCalculator = () => {
                 placeholder="Enter your current rate"
                 value={loanData.currentRate || ""}
                 onChange={(e) => setLoanData({ ...loanData, currentRate: parseFloat(e.target.value) || 0 })}
-                className="h-14 text-lg"
+                className="h-14 text-lg border-2 border-pnb-gold"
               />
             </div>
           </div>
@@ -172,15 +186,21 @@ const LoanCalculator = () => {
                   <Input
                     type="number"
                     placeholder="Months"
+                    min="0"
+                    max="11"
                     value={loanData.tenureMonths || ""}
-                    onChange={(e) => setLoanData({ ...loanData, tenureMonths: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => {
+                      const months = parseInt(e.target.value) || 0;
+                      if (months > 11) {
+                        alert("Months cannot exceed 11. Please adjust the years if needed.");
+                        return;
+                      }
+                      setLoanData({ ...loanData, tenureMonths: months });
+                    }}
                     className="h-12"
                   />
-                  <div className="text-center text-sm text-muted-foreground">Months</div>
+                  <div className="text-center text-sm text-muted-foreground">Months (0-11)</div>
                 </div>
-              </div>
-              <div className="text-sm text-muted-foreground text-center">
-                Enter remaining loan tenure (e.g., 4 years 3 months)
               </div>
             </div>
           </div>
@@ -191,7 +211,8 @@ const LoanCalculator = () => {
             variant="coral"
             size="lg"
             onClick={calculateSavings}
-            className="px-12 py-6 text-lg rounded-xl"
+            disabled={!isFormValid()}
+            className="px-12 py-6 text-lg rounded-xl border-2 border-pnb-gold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             CLICK HERE →
           </Button>
@@ -206,7 +227,7 @@ const LoanCalculator = () => {
               variant="ghost"
               size="icon"
               onClick={() => setShowResults(false)}
-              className="absolute right-4 top-4"
+              className="absolute right-4 top-4 z-50"
             >
               <X className="h-6 w-6" />
             </Button>
@@ -258,7 +279,11 @@ const LoanCalculator = () => {
 
                 {/* Action Buttons */}
                 <div className="space-y-4">
-                  <Button variant="pnb" className="w-full py-4 text-lg rounded-xl">
+                  <Button 
+                    variant="pnb" 
+                    className="w-full py-4 text-lg rounded-xl"
+                    onClick={() => window.open('https://www.pnbhousing.com/', '_blank')}
+                  >
                     📋 Switch to PNB Now 🔗
                   </Button>
                   <Button

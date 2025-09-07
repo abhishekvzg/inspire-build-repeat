@@ -54,6 +54,9 @@ All colors MUST be HSL.
     --gradient-pnb: linear-gradient(135deg, hsl(var(--pnb-red)), hsl(var(--pnb-red-light)));
     --gradient-gold: linear-gradient(135deg, hsl(var(--pnb-gold)), hsl(var(--pnb-gold-light)));
     --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(120 45% 60%));
+    
+    /* Modal backdrop blur */
+    --backdrop-blur: blur(20px);
 
     --sidebar-background: 0 0% 98%;
 

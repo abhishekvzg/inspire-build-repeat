@@ -2,7 +2,7 @@ const HeroSection = () => {
   return (
     <section className="bg-gradient-pnb text-white py-16 px-4">
       <div className="max-w-6xl mx-auto text-center">
-        <div className="bg-pnb-red/90 rounded-3xl p-12 mb-8 shadow-2xl">
+        <div className="bg-pnb-red/90 rounded-3xl p-12 mb-8 shadow-2xl border-4 border-pnb-gold">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             GAIN BIG WITH PNB HOME LOANS
           </h1>
