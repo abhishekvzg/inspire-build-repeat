@@ -63,26 +63,29 @@ const LoanCalculator = () => {
     const monthlySavings = currentEMI - pnbEMI;
     const totalSavings = monthlySavings * totalTenureMonths;
     
-    // Calculate early closure using proper prepayment formula
-    // If monthly savings are used as prepayment, calculate reduced tenure
-    let remainingPrincipal = loanAmount;
-    let monthsPassed = 0;
-    const pnbMonthlyEMI = pnbEMI;
+    // Calculate early closure using logarithmic formula
+    // When keeping the same EMI but switching to lower rate, calculate new tenure
+    let newTenureMonths = totalTenureMonths;
+    let earlyClosureYears = 0;
+    let earlyClosureMonths = 0;
     
-    // Simulate loan with prepayment using savings
-    while (remainingPrincipal > 0 && monthsPassed < totalTenureMonths) {
-      const interestPayment = remainingPrincipal * pnbMonthlyRate;
-      const principalPayment = pnbMonthlyEMI - interestPayment;
-      const prepayment = Math.max(0, monthlySavings); // Use savings as prepayment
+    // Use current EMI with PNB's lower rate to calculate reduced tenure
+    if (currentEMI > loanAmount * pnbMonthlyRate) {
+      // Formula: N = ln(EMI / (EMI - P × r)) / ln(1 + r)
+      const numerator = Math.log(currentEMI / (currentEMI - loanAmount * pnbMonthlyRate));
+      const denominator = Math.log(1 + pnbMonthlyRate);
+      newTenureMonths = Math.ceil(numerator / denominator);
       
-      remainingPrincipal -= (principalPayment + prepayment);
-      monthsPassed++;
+      // Ensure new tenure is not longer than original
+      newTenureMonths = Math.min(newTenureMonths, totalTenureMonths);
       
-      if (remainingPrincipal <= 0) break;
+      earlyClosureYears = Math.floor(newTenureMonths / 12);
+      earlyClosureMonths = newTenureMonths % 12;
+    } else {
+      // EMI too small to cover interest - use original tenure
+      earlyClosureYears = Math.floor(totalTenureMonths / 12);
+      earlyClosureMonths = totalTenureMonths % 12;
     }
-    
-    const earlyClosureYears = Math.floor(monthsPassed / 12);
-    const earlyClosureMonths = monthsPassed % 12;
 
     setSavingsResult({
       totalSavings,
