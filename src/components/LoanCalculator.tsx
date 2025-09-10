@@ -124,7 +124,7 @@ const LoanCalculator = () => {
                   type="number"
                   step="0.1"
                   value={loanData.pnbRate}
-                  onChange={(e) => setLoanData({ ...loanData, pnbRate: parseFloat(e.target.value) || 7.5 })}
+                  onChange={(e) => setLoanData({ ...loanData, pnbRate: parseFloat(e.target.value) || 0 })}
                   className="text-4xl font-bold text-success mb-2 bg-transparent border-none text-center h-auto p-0"
                 />
                 <div className="text-success font-medium">Punjab National Bank special offer rate</div>
@@ -141,7 +141,7 @@ const LoanCalculator = () => {
                 placeholder="Enter your current rate"
                 value={loanData.currentRate || ""}
                 onChange={(e) => setLoanData({ ...loanData, currentRate: parseFloat(e.target.value) || 0 })}
-                className="h-14 text-lg border-2 border-pnb-gold"
+                className="h-14 text-lg"
               />
             </div>
           </div>
@@ -160,7 +160,7 @@ const LoanCalculator = () => {
                    const value = e.target.value.replace(/,/g, '');
                    setLoanData({ ...loanData, loanAmount: parseInt(value) || 0 });
                  }}
-                 className="h-14 text-lg border-2 border-pnb-gold"
+                 className="h-14 text-lg"
                />
               <div className="px-2">
                 <div className="text-sm text-muted-foreground mb-2">
@@ -191,7 +191,7 @@ const LoanCalculator = () => {
                      placeholder="Years"
                      value={loanData.tenureYears || ""}
                      onChange={(e) => setLoanData({ ...loanData, tenureYears: parseInt(e.target.value) || 0 })}
-                     className="h-12 border-2 border-pnb-gold"
+                     className="h-12"
                    />
                   <div className="text-center text-sm text-muted-foreground">Years</div>
                 </div>
@@ -210,7 +210,7 @@ const LoanCalculator = () => {
                        }
                        setLoanData({ ...loanData, tenureMonths: months });
                      }}
-                     className="h-12 border-2 border-pnb-gold"
+                     className="h-12"
                    />
                    <div className="text-center text-sm text-muted-foreground">Months (0-12)</div>
                 </div>
@@ -225,7 +225,11 @@ const LoanCalculator = () => {
             size="lg"
             onClick={calculateSavings}
             disabled={!isFormValid()}
-            className="px-12 py-6 text-lg rounded-xl border-2 border-pnb-gold disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`px-12 py-6 text-lg rounded-xl border-2 border-pnb-gold transition-all duration-300 ${
+              isFormValid() 
+                ? "bg-coral hover:bg-coral/90 text-coral-foreground" 
+                : "opacity-50 cursor-not-allowed bg-coral/50"
+            }`}
           >
             CLICK HERE →
           </Button>
