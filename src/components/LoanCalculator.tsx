@@ -63,13 +63,26 @@ const LoanCalculator = () => {
     const monthlySavings = currentEMI - pnbEMI;
     const totalSavings = monthlySavings * totalTenureMonths;
     
-    // Calculate early closure - proper calculation using prepayment logic
-    // If savings are used for prepayment, reduce principal monthly
-    const savingsAsPercent = (monthlySavings / currentEMI) * 100;
-    const tenureReductionPercent = Math.min(savingsAsPercent * 0.8, 40); // Cap at 40% reduction
-    const reducedTenureMonths = Math.floor(totalTenureMonths * (1 - tenureReductionPercent / 100));
-    const earlyClosureYears = Math.floor(reducedTenureMonths / 12);
-    const earlyClosureMonths = reducedTenureMonths % 12;
+    // Calculate early closure using proper prepayment formula
+    // If monthly savings are used as prepayment, calculate reduced tenure
+    let remainingPrincipal = loanAmount;
+    let monthsPassed = 0;
+    const pnbMonthlyEMI = pnbEMI;
+    
+    // Simulate loan with prepayment using savings
+    while (remainingPrincipal > 0 && monthsPassed < totalTenureMonths) {
+      const interestPayment = remainingPrincipal * pnbMonthlyRate;
+      const principalPayment = pnbMonthlyEMI - interestPayment;
+      const prepayment = Math.max(0, monthlySavings); // Use savings as prepayment
+      
+      remainingPrincipal -= (principalPayment + prepayment);
+      monthsPassed++;
+      
+      if (remainingPrincipal <= 0) break;
+    }
+    
+    const earlyClosureYears = Math.floor(monthsPassed / 12);
+    const earlyClosureMonths = monthsPassed % 12;
 
     setSavingsResult({
       totalSavings,
@@ -139,16 +152,16 @@ const LoanCalculator = () => {
               <Label className="text-lg font-semibold text-muted-foreground">
                 Your Loan Amount Outstanding (in Rupees)
               </Label>
-              <Input
-                type="text"
-                placeholder="Enter amount in rupees (e.g., 5000000)"
-                value={loanData.loanAmount ? loanData.loanAmount.toLocaleString('en-IN') : ""}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/,/g, '');
-                  setLoanData({ ...loanData, loanAmount: parseInt(value) || 0 });
-                }}
-                className="h-14 text-lg"
-              />
+               <Input
+                 type="text"
+                 placeholder="Enter amount in rupees"
+                 value={loanData.loanAmount ? loanData.loanAmount.toLocaleString('en-IN') : ""}
+                 onChange={(e) => {
+                   const value = e.target.value.replace(/,/g, '');
+                   setLoanData({ ...loanData, loanAmount: parseInt(value) || 0 });
+                 }}
+                 className="h-14 text-lg border-2 border-pnb-gold"
+               />
               <div className="px-2">
                 <div className="text-sm text-muted-foreground mb-2">
                   Amount in rupees (up to ₹5 Crores)
@@ -173,33 +186,33 @@ const LoanCalculator = () => {
               </Label>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Input
-                    type="number"
-                    placeholder="Years"
-                    value={loanData.tenureYears || ""}
-                    onChange={(e) => setLoanData({ ...loanData, tenureYears: parseInt(e.target.value) || 0 })}
-                    className="h-12"
-                  />
+                   <Input
+                     type="number"
+                     placeholder="Years"
+                     value={loanData.tenureYears || ""}
+                     onChange={(e) => setLoanData({ ...loanData, tenureYears: parseInt(e.target.value) || 0 })}
+                     className="h-12 border-2 border-pnb-gold"
+                   />
                   <div className="text-center text-sm text-muted-foreground">Years</div>
                 </div>
                 <div className="space-y-2">
                   <Input
                     type="number"
                     placeholder="Months"
-                    min="0"
-                    max="11"
-                    value={loanData.tenureMonths || ""}
-                    onChange={(e) => {
-                      const months = parseInt(e.target.value) || 0;
-                      if (months > 11) {
-                        alert("Months cannot exceed 11. Please adjust the years if needed.");
-                        return;
-                      }
-                      setLoanData({ ...loanData, tenureMonths: months });
-                    }}
-                    className="h-12"
-                  />
-                  <div className="text-center text-sm text-muted-foreground">Months (0-11)</div>
+                     min="0"
+                     max="12"
+                     value={loanData.tenureMonths || ""}
+                     onChange={(e) => {
+                       const months = parseInt(e.target.value) || 0;
+                       if (months > 12) {
+                         alert("Months cannot exceed 12. Please adjust the years if needed.");
+                         return;
+                       }
+                       setLoanData({ ...loanData, tenureMonths: months });
+                     }}
+                     className="h-12 border-2 border-pnb-gold"
+                   />
+                   <div className="text-center text-sm text-muted-foreground">Months (0-12)</div>
                 </div>
               </div>
             </div>
@@ -221,16 +234,8 @@ const LoanCalculator = () => {
 
       {/* Results Modal */}
       <Dialog open={showResults} onOpenChange={setShowResults}>
-        <DialogContent className="max-w-2xl p-0 gap-0 bg-gradient-to-br from-orange-50 to-yellow-50">
+        <DialogContent className="max-w-2xl p-0 gap-0 bg-gradient-to-br from-orange-50 to-yellow-50 border-0">
           <div className="relative p-8">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowResults(false)}
-              className="absolute right-4 top-4 z-50"
-            >
-              <X className="h-6 w-6" />
-            </Button>
 
             <div className="text-center mb-8">
               <div className="w-16 h-16 bg-gradient-pnb rounded-full flex items-center justify-center mx-auto mb-4">
