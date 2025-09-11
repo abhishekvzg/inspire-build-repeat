@@ -241,66 +241,66 @@ const LoanCalculator = () => {
 
       {/* Results Modal */}
       <Dialog open={showResults} onOpenChange={setShowResults}>
-        <DialogContent className="max-w-2xl p-0 gap-0 bg-gradient-to-br from-orange-50 to-yellow-50 border-0">
-          <div className="relative p-8">
+        <DialogContent className="max-w-2xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-gradient-to-br from-orange-50 to-yellow-50 border-0">
+          <div className="relative p-4 sm:p-8">
 
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-gradient-pnb rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-8 w-8 text-white" />
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-pnb rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-pnb-red">Your PNB Savings Calculation</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-pnb-red">Your PNB Savings Calculation</h2>
             </div>
 
             {savingsResult && (
               <>
                 {/* Total Savings Card */}
-                <Card className="bg-gradient-success border-0 text-white mb-6">
-                  <CardContent className="p-8 text-center">
-                    <h3 className="text-xl font-semibold mb-4">Your Total Savings</h3>
-                    <div className="text-4xl font-bold mb-2">
+                <Card className="bg-gradient-success border-0 text-white mb-4 sm:mb-6">
+                  <CardContent className="p-4 sm:p-8 text-center">
+                    <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Your Total Savings</h3>
+                    <div className="text-2xl sm:text-4xl font-bold mb-2">
                       {formatCurrency(savingsResult.totalSavings)}
                     </div>
-                    <div className="text-lg opacity-90">
+                    <div className="text-base sm:text-lg opacity-90">
                       Over {formatTenure(loanData.tenureYears, loanData.tenureMonths)}
                     </div>
                   </CardContent>
                 </Card>
 
                 {/* Savings Details */}
-                <div className="grid md:grid-cols-2 gap-4 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
                   <Card className="bg-success/10 border-success/30">
-                    <CardContent className="p-6 text-center">
-                      <h4 className="font-semibold text-success mb-3">Monthly Savings with PNB</h4>
-                      <div className="text-2xl font-bold text-success mb-1">
+                    <CardContent className="p-4 sm:p-6 text-center">
+                      <h4 className="font-semibold text-success mb-2 sm:mb-3 text-sm sm:text-base">Monthly Savings with PNB</h4>
+                      <div className="text-xl sm:text-2xl font-bold text-success mb-1">
                         {formatCurrency(savingsResult.monthlySavings)}
                       </div>
-                      <div className="text-sm text-success/80">Every month</div>
+                      <div className="text-xs sm:text-sm text-success/80">Every month</div>
                     </CardContent>
                   </Card>
 
                   <Card className="bg-success/10 border-success/30">
-                    <CardContent className="p-6 text-center">
-                      <h4 className="font-semibold text-success mb-3">Early Loan Closure</h4>
-                      <div className="text-2xl font-bold text-success mb-1">
+                    <CardContent className="p-4 sm:p-6 text-center">
+                      <h4 className="font-semibold text-success mb-2 sm:mb-3 text-sm sm:text-base">Early Loan Closure</h4>
+                      <div className="text-xl sm:text-2xl font-bold text-success mb-1">
                         {savingsResult.earlyClosureYears}Y {savingsResult.earlyClosureMonths}M
                       </div>
-                      <div className="text-sm text-success/80">Close loan early!</div>
+                      <div className="text-xs sm:text-sm text-success/80">Close loan early!</div>
                     </CardContent>
                   </Card>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <Button 
                     variant="pnb" 
-                    className="w-full py-4 text-lg rounded-xl"
+                    className="w-full py-3 sm:py-4 text-base sm:text-lg rounded-xl"
                     onClick={() => window.open('https://www.pnbhousing.com/', '_blank')}
                   >
                     📋 Switch to PNB Now 🔗
                   </Button>
                   <Button
                     variant="pnb-outline"
-                    className="w-full py-4 text-lg rounded-xl"
+                    className="w-full py-3 sm:py-4 text-base sm:text-lg rounded-xl"
                     onClick={() => setShowResults(false)}
                   >
                     Calculate Again
